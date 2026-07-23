@@ -1,0 +1,7 @@
+# Ignore sensitive files and local config
+# Do NOT commit service account JSON or env files with secrets
+*.json
+*.key
+.env
+.env.*
+.rclone.conf

@@ -1,0 +1,29 @@
+[Unit]
+Description=Rclone mount for Google Drive
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+# If you store rclone config in a non-default location, set RCLONE_CONFIG
+# Environment=RCLONE_CONFIG=/etc/rclone/rclone.conf
+
+# Update these variables as needed. Do NOT put service account JSON into the repo.
+Environment=REMOTE=gdrive
+Environment=MOUNT_POINT=/mnt/gdrive
+Environment=FOLDER_ID=
+Environment=VFS_CACHE_MAX_SIZE=1G
+
+ExecStart=/usr/bin/rclone mount ${REMOTE}: ${MOUNT_POINT} \
+  --allow-other \
+  --vfs-cache-mode full \
+  --vfs-cache-max-size ${VFS_CACHE_MAX_SIZE} \
+  --buffer-size 32M \
+  --dir-cache-time 72h \
+  --poll-interval 15s
+
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
